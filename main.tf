@@ -1,17 +1,17 @@
 # Create resource group
-resource "azurerm_resource_group" "prod" {
-  name     = "tr-iot-hack"
-  location = var.location
-}
+#resource "azurerm_resource_group" "prod" {
+#  name     = "tr-iot-hack"
+#  location = var.location
+#} Test
 
 # Create Azure storage account
-#resource "azurerm_storage_account" "prod" {
-#  name                     = "${var.prefix}iotprodsa"
-#  resource_group_name      = azurerm_resource_group.prod.name
-#  location                 = azurerm_resource_group.prod.location
- # account_tier             = "Standard"
-  #account_replication_type = "LRS"
-#}
+resource "azurerm_storage_account" "prod" {
+  name                     = "${var.prefix}iotprodsa"
+  resource_group_name      = "tr-iot-hack"
+  location                 = var.location
+  account_tier             = "Standard"
+   account_replication_type = "LRS"
+}
 
 # Create Azure storage account container
 resource "azurerm_storage_container" "prod" {
@@ -23,8 +23,8 @@ resource "azurerm_storage_container" "prod" {
 # Create Application insights
 resource "azurerm_application_insights" "prod" {
   name                = "${var.prefix}iot-prod-ai"
-  location            = azurerm_resource_group.prod.location
-  resource_group_name = azurerm_resource_group.prod.name
+  location            = var.location
+  resource_group_name = "tr-iot-hack"
   application_type    = "web"
 }
 
@@ -34,8 +34,8 @@ data "azurerm_client_config" "current" {}
 # Create Azure key vault
 resource "azurerm_key_vault" "prod" {
   name                     = "${var.prefix}iot-prod-kv"
-  location                 = azurerm_resource_group.prod.location
-  resource_group_name      = azurerm_resource_group.prod.name
+  location                 = var.location
+  resource_group_name      = "tr-iot-hack"
   tenant_id                = data.azurerm_client_config.current.tenant_id
   sku_name                 = "premium"
   purge_protection_enabled = false
@@ -44,8 +44,8 @@ resource "azurerm_key_vault" "prod" {
 # # Create Azure container registry
 # resource "azurerm_container_registry" "prod" {
 #   name                = "${var.prefix}iotprodcr"
-#   location            = azurerm_resource_group.prod.location
-#   resource_group_name = azurerm_resource_group.prod.name
+#   location            = var.location
+#   resource_group_name = "tr-iot-hack"
 #   sku                 = "Premium"
 #   admin_enabled       = true
 # }
@@ -53,8 +53,8 @@ resource "azurerm_key_vault" "prod" {
 # # Create Azure machine learning workspace
 # resource "azurerm_machine_learning_workspace" "prod" {
 #   name                    = "${var.prefix}-iot-prod-workspace"
-#   location                = azurerm_resource_group.prod.location
-#   resource_group_name     = azurerm_resource_group.prod.name
+#   location                = var.location
+#   resource_group_name     = "tr-iot-hack"
 #   application_insights_id = azurerm_application_insights.prod.id
 #   key_vault_id            = azurerm_key_vault.prod.id
 #   storage_account_id      = azurerm_storage_account.prod.id
@@ -68,8 +68,8 @@ resource "azurerm_key_vault" "prod" {
 # Create Azure iot hub (https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/iothub)
 resource "azurerm_iothub" "prod" {
   name                = "${var.prefix}iot-prod-iothub"
-  resource_group_name = azurerm_resource_group.prod.name
-  location            = azurerm_resource_group.prod.location
+  resource_group_name = "tr-iot-hack"
+  location            = var.location
 
   sku {
     name     = "S1"
@@ -119,8 +119,8 @@ resource "azurerm_iothub" "prod" {
 # Create Azure service plan as compute resource on which the Azure function will run
 resource "azurerm_app_service_plan" "prod" {
   name                = "${var.prefix}iot-prod-asp"
-  location            = azurerm_resource_group.prod.location
-  resource_group_name = azurerm_resource_group.prod.name
+  location            = var.location
+  resource_group_name = "tr-iot-hack"
   kind                = "Linux"
   reserved            = true
 
@@ -133,8 +133,8 @@ resource "azurerm_app_service_plan" "prod" {
 # Create Azure functions (https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/function_app)
 resource "azurerm_function_app" "prod" {
   name                       = "${var.prefix}iot-prod-fa"
-  location                   = azurerm_resource_group.prod.location
-  resource_group_name        = azurerm_resource_group.prod.name
+  location                   = var.location
+  resource_group_name        = "tr-iot-hack"
   app_service_plan_id        = azurerm_app_service_plan.prod.id
   storage_account_name       = azurerm_storage_account.prod.name
   storage_account_access_key = azurerm_storage_account.prod.primary_access_key
