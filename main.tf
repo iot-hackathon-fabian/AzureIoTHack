@@ -1,6 +1,6 @@
 # Create resource group
 resource "azurerm_resource_group" "prod" {
-  name     = "${var.prefix}iot-prod-rg"
+  name     = "tr-iot-hack"
   location = var.location
 }
 
