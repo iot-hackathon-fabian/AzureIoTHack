@@ -8,5 +8,3 @@ variable "prefix" {
   default     = "fafe"
   description = "The prefix used for all resources"
 }
-
-#test
