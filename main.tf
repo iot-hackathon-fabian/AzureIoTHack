@@ -5,13 +5,13 @@ resource "azurerm_resource_group" "prod" {
 }
 
 # Create Azure storage account
-resource "azurerm_storage_account" "prod" {
-  name                     = "${var.prefix}iotprodsa"
-  resource_group_name      = azurerm_resource_group.prod.name
-  location                 = azurerm_resource_group.prod.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
+#resource "azurerm_storage_account" "prod" {
+#  name                     = "${var.prefix}iotprodsa"
+#  resource_group_name      = azurerm_resource_group.prod.name
+#  location                 = azurerm_resource_group.prod.location
+ # account_tier             = "Standard"
+  #account_replication_type = "LRS"
+#}
 
 # Create Azure storage account container
 resource "azurerm_storage_container" "prod" {
